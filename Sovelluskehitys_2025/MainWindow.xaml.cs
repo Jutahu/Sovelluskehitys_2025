@@ -83,6 +83,11 @@ namespace Sovelluskehitys_2025
             SqlConnection yhteys = new SqlConnection(polku);
             yhteys.Open();
 
+            if (tekstikentta_1.Text == "" || tekstikentta_2.Text == "" || tekstikentta_3.Text == "")
+            {
+                MessageBox.Show("Täytä kaikki kentät ennen lisäämistä!");
+                return;
+            }
             string kysely = "INSERT INTO tuotteet (nimi, hinta, varastosaldo) VALUES ('"+tekstikentta_1.Text+"', "+tekstikentta_2.Text+", "+tekstikentta_3.Text+");";
             SqlCommand komento = new SqlCommand(kysely, yhteys);
             komento.ExecuteNonQuery();
@@ -106,7 +111,11 @@ namespace Sovelluskehitys_2025
         {
             SqlConnection yhteys = new SqlConnection(polku);
             yhteys.Open();
-
+            if (cb_tuotelista.SelectedValue == null)
+            {
+                MessageBox.Show("Valitse ensin poistettava tuote!");
+                return;
+            }
             string id = cb_tuotelista.SelectedValue.ToString();
             System.Diagnostics.Debug.WriteLine("Valittu id: " + id);
             //MessageBox.Show("poistetaan tuote:" + id);
