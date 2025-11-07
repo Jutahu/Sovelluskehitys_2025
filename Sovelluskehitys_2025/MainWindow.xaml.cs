@@ -127,5 +127,17 @@ namespace Sovelluskehitys_2025
             Paivita_DataGrid("SELECT * FROM tuotteet", "tuotteet", tuotelista);
             Paivita_ComboBox(sender, e);
         }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Valinta on päällä"); 
+            asiakkaat_tab.IsEnabled = true;
+
+        }
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Valinta on pois päältä");
+            asiakkaat_tab.IsEnabled = false;
+        }
     }
 }
