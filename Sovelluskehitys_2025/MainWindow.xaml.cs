@@ -27,7 +27,7 @@ namespace Sovelluskehitys_2025
             InitializeComponent();
         }
 
-        private void Paivita_DataGrid(string kysely, string taulun_nimi, DataGrid grid)
+        private void Paivita_DataGrid(string kysely, ComboBox kombo)
         {
             SqlCommand komento = yhteys.CreateCommand();
             komento.CommandText = kysely;
@@ -41,7 +41,7 @@ namespace Sovelluskehitys_2025
 
         private void Paivita_ComboBox(object sender, RoutedEventArgs e)
         {
-            SqlCommand komento = new SqlCommand("SELECT * FROM tuotteet", yhteys);
+            SqlCommand komento = new SqlCommand(kysely, yhteys);
             SqlDataReader lukija = komento.ExecuteReader();
 
             /* tehdään datataulu comboboxin sisältöa varten */
@@ -50,9 +50,9 @@ namespace Sovelluskehitys_2025
             taulu.Columns.Add("nimi", typeof(string));
 
             /* tehdään sidos että comboboxissa näytetään datataulu */
-            cb_tuotelista.ItemsSource = taulu.DefaultView;
-            cb_tuotelista.DisplayMemberPath = "nimi";
-            cb_tuotelista.SelectedValuePath = "id";
+            kombo.ItemsSource = taulu.DefaultView;
+            kombo.DisplayMemberPath = "nimi";
+            kombo.SelectedValuePath = "id";
 
             while (lukija.Read())
             {
@@ -78,7 +78,7 @@ namespace Sovelluskehitys_2025
 
 
             Paivita_DataGrid("SELECT * FROM tuotteet", "tuotteet", tuotelista);
-            Paivita_ComboBox(sender, e);
+            Paivita_ComboBox("SELECT * FROM tuotteet", cb_tuotelista);
 
             tekstikentta_1.Clear();
             tekstikentta_2.Clear();
@@ -106,7 +106,7 @@ namespace Sovelluskehitys_2025
 
 
             Paivita_DataGrid("SELECT * FROM tuotteet", "tuotteet", tuotelista);
-            Paivita_ComboBox(sender, e);
+            Paivita_ComboBox("SELECT * FROM tuotteet", cb_tuotelista);
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -173,6 +173,27 @@ namespace Sovelluskehitys_2025
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
+        }
+
+
+        private void tilaukset_tab_GotFocus(object sender, RoutedEventArgs e)
+        {
+            Paivita_ComboBox("SELECT * FROM tuotteet", cb_tuote_tilaus);
+            Paivita_ComboBox("SELECT * FROM asiakkaat", cb_asiakas_tilaus);
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            if (cb_tuote_tilaus.SelectedValue == null || cb_asiakas_tilaus.SelectedValue == null)
+            {
+                MessageBox.Show("Valitse tuote ja asiakas ensin.");
+                return;
+            }
+            string tuote_id = cb_tuote_tilaus.SelectedValue.ToString();
+            string asiakas_id = cb_asiakas_tilaus.SelectedValue.ToString();
+
+
+            /*tähän insert tilaukset tietokantaan*/
         }
     }
 }
