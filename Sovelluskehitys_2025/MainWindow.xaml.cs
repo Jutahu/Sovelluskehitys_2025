@@ -141,6 +141,7 @@ namespace Sovelluskehitys_2025
 
 
             Paivita_DataGrid("SELECT * FROM asiakkaat", "asiakkaat", asiakaslista);
+            Paivita_ComboBox("SELECT * FROM asiakkaat", cb_asiakas_tilaus);
 
 
             asiakas_nimi.Clear();
@@ -158,6 +159,9 @@ namespace Sovelluskehitys_2025
                 Paivita_DataGrid("SELECT * FROM tuotteet", "tuotteet", tuotelista);
                 Paivita_DataGrid("SELECT * FROM asiakkaat", "asiakkaat", asiakaslista);
                 Paivita_ComboBox("SELECT * FROM tuotteet", cb_tuotelista);
+
+                Paivita_ComboBox("SELECT * FROM tuotteet", cb_tuote_tilaus);
+                Paivita_ComboBox("SELECT * FROM asiakkaat", cb_asiakas_tilaus);
                 //asiakkaat_tab.IsEnabled = false;
             }
             catch (Exception ex)
@@ -191,6 +195,13 @@ namespace Sovelluskehitys_2025
             }
             string tuote_id = cb_tuote_tilaus.SelectedValue.ToString();
             string asiakas_id = cb_asiakas_tilaus.SelectedValue.ToString();
+
+            string kysely = "INSERT INTO tilaukset (tuote_id, asiakas_id) VALUES ('" + tuote_id + "', '" + asiakas_id + "');";
+            SqlCommand komento = new SqlCommand(kysely, yhteys);
+            komento.ExecuteNonQuery();
+
+
+            Paivita_DataGrid("SELECT * FROM tilaukset", "tilaukset", tilauslista);
 
 
             /*tähän insert tilaukset tietokantaan*/
