@@ -20,6 +20,7 @@ namespace Sovelluskehitys_2025
     public partial class MainWindow : Window
     {
         string polku = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\k2303164\\Documents\\sovelluskehitys.mdf;Integrated Security=True;Connect Timeout=30";
+
         SqlConnection yhteys;
 
         public MainWindow()
@@ -27,7 +28,7 @@ namespace Sovelluskehitys_2025
             InitializeComponent();
         }
 
-        private void Paivita_DataGrid(string kysely, ComboBox kombo)
+        private void Paivita_DataGrid(string kysely, string taulun_nimi, DataGrid grid)
         {
             SqlCommand komento = yhteys.CreateCommand();
             komento.CommandText = kysely;
@@ -39,7 +40,7 @@ namespace Sovelluskehitys_2025
             grid.ItemsSource = taulu.DefaultView;
         }
 
-        private void Paivita_ComboBox(object sender, RoutedEventArgs e)
+        private void Paivita_ComboBox(string kysely, ComboBox kombo)
         {
             SqlCommand komento = new SqlCommand(kysely, yhteys);
             SqlDataReader lukija = komento.ExecuteReader();
@@ -72,7 +73,7 @@ namespace Sovelluskehitys_2025
                 MessageBox.Show("Täytä kaikki kentät ennen tallennusta.");
                 return;
             }
-            string kysely = "INSERT INTO tuotteet (nimi, hinta, varastosaldo) VALUES ('"+tekstikentta_1.Text+"', "+tekstikentta_2.Text+", "+tekstikentta_3.Text+");";
+            string kysely = "INSERT INTO tuotteet (nimi, hinta, varastosaldo) VALUES ('" + tekstikentta_1.Text + "', " + tekstikentta_2.Text + ", " + tekstikentta_3.Text + ");";
             SqlCommand komento = new SqlCommand(kysely, yhteys);
             komento.ExecuteNonQuery();
 
@@ -123,7 +124,7 @@ namespace Sovelluskehitys_2025
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
@@ -156,7 +157,7 @@ namespace Sovelluskehitys_2025
 
                 Paivita_DataGrid("SELECT * FROM tuotteet", "tuotteet", tuotelista);
                 Paivita_DataGrid("SELECT * FROM asiakkaat", "asiakkaat", asiakaslista);
-                Paivita_ComboBox(this, null);
+                Paivita_ComboBox("SELECT * FROM tuotteet", cb_tuotelista);
                 //asiakkaat_tab.IsEnabled = false;
             }
             catch (Exception ex)
@@ -174,7 +175,6 @@ namespace Sovelluskehitys_2025
         {
             System.Windows.Application.Current.Shutdown();
         }
-
 
         private void tilaukset_tab_GotFocus(object sender, RoutedEventArgs e)
         {
